@@ -1,0 +1,38 @@
+<project name="jmtrandom" default="compile" basedir=".">
+
+	<property name="version" value="0.1.0"/>
+
+	<path id="class.path.test">
+		<pathelement location="bin"/>
+		<pathelement location="test/bin"/>
+	</path>
+
+	<target name="init">
+		<mkdir dir="bin"/>
+		<mkdir dir="test/bin"/>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="src" destdir="bin" includeantruntime="false"/>
+	</target>
+
+	<target name="test-compile" depends="compile">
+		<javac srcdir="test/src" destdir="test/bin" includeantruntime="false" classpath="bin" />
+	</target>
+
+	<target name="test-run" depends="test-compile">
+		<java classname="TestMT" classpathref="class.path.test" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${ant.project.name}-${version}.jar" basedir="bin"/>
+	</target>
+
+	<target name="clean">
+		<delete verbose="true">
+		   <fileset dir="bin" includes="**/*.class"/>
+   		</delete>
+		<!-- <delete file="${ant.project.name}-${version}.jar" verbose="true"/> -->
+ 	</target>
+
+</project>
