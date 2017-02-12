@@ -19,12 +19,12 @@ public class Random {
 		return mtrand.genRandRealo0o1();
 	}
 
-	public double nextUnif(double low, double high) {
-		return (high - low) *  mtrand.genRandRealo0o1() + low;
+	public double nextUnif(double min, double max) {
+		return (max - min) *  mtrand.genRandRealo0o1() + min;
 	}
 
-	public double nextExp(double beta) {
-		return -Math.log(this.nextUnif()) / beta;
+	public double nextExp(double rate) {
+		return -Math.log(this.nextUnif()) / rate;
 	}
 
 	/* Normal distribution */
@@ -42,20 +42,20 @@ public class Random {
 		}
 	}
 
-	public double nextNormal(double mu, double sig) {
-		return mu + sig * this.nextNormal();
+	public double nextNormal(double mean, double sd) {
+		return mean + sd * this.nextNormal();
 	}
 
-	public double nextTruncNormal(double mu, double sig) {
+	public double nextTruncNormal(double mean, double sd) {
 		double tmp;
 		do {
-			tmp = this.nextNormal(mu, sig);
+			tmp = this.nextNormal(mean, sd);
 		} while (tmp > 0.0);
 		return tmp;
 	}
 
-	public double nextLogNormal(double mu, double sig) {
-		return Math.exp(nextNormal(mu, sig));
+	public double nextLogNormal(double mean, double sd) {
+		return Math.exp(nextNormal(mean, sd));
 	}
 
 	/* Logistic distribution */
@@ -65,20 +65,20 @@ public class Random {
     	return Math.log(x/(1.0-x));
     }
 
-    public double nextLogistic(double mu, double phi) {
-		return mu + phi * this.nextLogistic();
+    public double nextLogistic(double loc, double scale) {
+		return loc + scale * this.nextLogistic();
     }
 
-    public double nextTruncLogistic(double mu, double phi) {
+    public double nextTruncLogistic(double loc, double scale) {
 		double tmp;
 		do {
-			tmp = this.nextLogistic(mu, phi);
+			tmp = this.nextLogistic(loc, scale);
 		} while (tmp > 0.0);
 		return tmp;
     }
 
-	public double nextLogLogistic(double mu, double phi) {
-		return Math.exp(nextLogistic(mu, phi));
+	public double nextLogLogistic(double loc, double scale) {
+		return Math.exp(nextLogistic(loc, scale));
 	}
 	
 	/* Extreme distribution */
@@ -86,9 +86,9 @@ public class Random {
 	// TODO
 	
 	/* Weibull distribution */
-
-	public double nextWeibull(double alpha, double beta) {
-		return Math.pow(-Math.log(this.nextUnif()) / beta, 1.0/alpha);
+	
+	public double nextWeibull(double shape, double scale) {
+		return scale * Math.pow(-Math.log(this.nextUnif()), 1.0/shape);
 	}
 
 }
