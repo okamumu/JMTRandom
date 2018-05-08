@@ -1,4 +1,4 @@
-package jp.rel.jmtrandom;
+package com.github.okamumu.jmtrandom;
 
 abstract public class MTRand64 implements MTRandInterface {
 

@@ -1,4 +1,4 @@
-package jp.rel.jmtrandom;
+package com.github.okamumu.jmtrandom;
 
 public enum SFMTParams {
 

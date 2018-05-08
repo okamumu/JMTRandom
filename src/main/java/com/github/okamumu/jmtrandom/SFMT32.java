@@ -10,7 +10,7 @@
  * 
  */
 
-package jp.rel.jmtrandom;
+package com.github.okamumu.jmtrandom;
 
 public final class SFMT32 extends MTRand32 {
 	

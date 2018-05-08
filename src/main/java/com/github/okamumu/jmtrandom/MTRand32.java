@@ -1,7 +1,7 @@
-package jp.rel.jmtrandom;
+package com.github.okamumu.jmtrandom;
 
 abstract public class MTRand32 implements MTRandInterface {
-	
+
 	abstract public int genRand32();
 
 	public int genRand31() {

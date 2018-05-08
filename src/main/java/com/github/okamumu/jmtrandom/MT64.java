@@ -10,7 +10,7 @@
  * 
  */
 
-package jp.rel.jmtrandom;
+package com.github.okamumu.jmtrandom;
 
 public final class MT64 extends MTRand64 {
 
