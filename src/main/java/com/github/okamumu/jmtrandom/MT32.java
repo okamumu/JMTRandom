@@ -1,4 +1,6 @@
-/*
+package com.github.okamumu.jmtrandom;
+
+/**
  * Mersenne Twister 32bit
  * 
  * The original program, mt19937ar, is provided under 3-clause BSD license.
@@ -9,8 +11,6 @@
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
  * 
  */
-
-package com.github.okamumu.jmtrandom;
 
 public final class MT32 extends MTRand32 {
 
@@ -30,24 +30,40 @@ public final class MT32 extends MTRand32 {
 		mt = new int [NN];
 		mti = NN + 1;
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param seed An integer for a seed.
+	 */
 	public MT32(int seed) {
 		this();
 		this.initGenRand(seed);
 	}
 
+	/**
+	 * Constructor
+	 * @param initKey An array of integer values which is a seed of sequence.
+	 */
 	public MT32(int[] initKey) {
 		this();
 		this.initByArray(initKey);
 	}
 
+	/*
+	 * The method to set a seed which is called from the constructor.
+	 * @param seed An integer for a seed.
+	 */
 	private void initGenRand(int seed) {
 		mt[0] = seed;
 		for (mti=1; mti<NN; mti++) {
 			mt[mti] = (1812433253 * (mt[mti-1] ^ (mt[mti-1] >>> 30)) + mti);
 		}
 	}
-	
+
+	/*
+	 * The method to set a seed (initial arrays) which is called from the constructor.
+	 * @param initKey An array of integers
+	 */
 	private void initByArray(int[] initKey) {
 		int keyLength = initKey.length;
 		this.initGenRand(19650218);

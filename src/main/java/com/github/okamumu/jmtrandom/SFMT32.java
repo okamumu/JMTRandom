@@ -1,4 +1,6 @@
-/*
+package com.github.okamumu.jmtrandom;
+
+/**
  * SFMT32 (SIMD-oriented Fast Mersenne Twister 32bit version)
  * 
  * The original program, SFMT, is provided under 3-clause BSD license.
@@ -9,8 +11,6 @@
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/
  * 
  */
-
-package com.github.okamumu.jmtrandom;
 
 public final class SFMT32 extends MTRand32 {
 	
@@ -28,7 +28,11 @@ public final class SFMT32 extends MTRand32 {
 
 	private final int pos32;
 
-	public SFMT32(SFMTParams params) {
+	/*
+	 * A common constructor which is used for the other constructors
+	 * @param params An object of SFMTParams which is a set of parameters for SFMT
+	 */
+	private SFMT32(SFMTParams params) {
 		this.params = params;
 		fSR2 = 8 * params.SFMT_SR2;
 		fSL2 = 8 * params.SFMT_SL2;
@@ -38,30 +42,56 @@ public final class SFMT32 extends MTRand32 {
 		x = new int [params.SFMT_N32];
 	}
 
+	/**
+	 * Constructor
+	 * @param seed An integer as a seed
+	 * @param params An object of SFMTParams which is a set of parameters for SFMT
+	 */
 	public SFMT32(int seed, SFMTParams params) {
 		this(params);
 		this.initGenRand(seed);
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param initKey An array of integers
+	 * @param params An object of SFMTParams which is a set of parameters for SFMT
+	 */
 	public SFMT32(int[] initKey, SFMTParams params) {
 		this(params);
 		this.initByArray(initKey);
 	}
-	
+
+	/**
+	 * Constructor with the default params of SFMT
+	 * @param seed An integer as a seed
+	 */
 	public SFMT32(int seed) {
 		this(defaultParams);
 		this.initGenRand(seed);
 	}
 	
+	/**
+	 * Constructor with the default params of SFMT
+	 * @param initKey An array of integers
+	 */
 	public SFMT32(int[] initKey) {
 		this(defaultParams);
 		this.initByArray(initKey);
 	}
-	
+
+	/**
+	 * The method to get a string to represent the generating polynomial.
+	 * @return A string
+	 */
 	public String getID() {
 		return params.SFMT_IDSTR;
 	}
 
+	/*
+	 * The method to set a seed which is called from the constructor.
+	 * @param seed An integer as a seed.
+	 */
 	private void initGenRand(int seed) {
 		x[0] = seed;
 		for (int i=1; i<params.SFMT_N32; i++) {
@@ -71,6 +101,12 @@ public final class SFMT32 extends MTRand32 {
 		this.periodCertification();
 	}
 
+	/*
+	 * The method to check and modify the initial arrays to ensure that
+	 * the period of random sequence under a given seed becomes the required one.
+	 * 
+	 * This is called from the constructor.
+	 */
 	private void periodCertification() {
 		int[] parity = new int [] {params.SFMT_PARITY1, params.SFMT_PARITY2, params.SFMT_PARITY3, params.SFMT_PARITY4};
 
@@ -99,15 +135,25 @@ public final class SFMT32 extends MTRand32 {
 		}
 	}
 
-	private int func1(int x) {
+	/*
+	 * This is a private function is called in initByArray 
+	 */
+	private final int func1(int x) {
 		return (x ^ (x >>> 27)) * 1664525;
 	}
 
-	private int func2(int x) {
+	/*
+	 * This is a private function is called in initByArray 
+	 */
+	private final int func2(int x) {
 		return (x ^ (x >>> 27)) * 1566083941;
 	}
 
-	private void initByArray(int[] initKey) {
+	/*
+	 * The method to set a seed which is called from the constructor.
+	 * @param initKey An array of integers.
+	 */
+	private final void initByArray(int[] initKey) {
 		int keyLength = initKey.length;
 		int i, j, r, lag, mid, count;
 		int size = params.SFMT_N * 4;
@@ -170,6 +216,11 @@ public final class SFMT32 extends MTRand32 {
 		periodCertification();
 	}
 
+	/*
+	 * The method to generate a random sequence.
+	 * The several values of sequence is generated at once,
+	 * and they are stored in the array x[].
+	 */
 	private void genRandAll() {
 		int r1 = params.SFMT_N32 - 8;
 		int r2 = params.SFMT_N32 - 4;
@@ -214,8 +265,12 @@ public final class SFMT32 extends MTRand32 {
 		}
 		return x[idx++];
 	}
-	
-	// for test
+
+	/**
+	 * The method to generate a random 64bit integer.
+	 * @return A long integer
+	 * @deprecated This is used for a test.
+	 */
 	public long genRand64() {
 		if (idx >= params.SFMT_N32) {
 			genRandAll();

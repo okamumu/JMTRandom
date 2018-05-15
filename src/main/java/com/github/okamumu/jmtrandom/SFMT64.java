@@ -1,4 +1,6 @@
-/*
+package com.github.okamumu.jmtrandom;
+
+/**
  * SFMT64 (SIMD-oriented Fast Mersenne Twister 64bit version)
  * 
  * The original program, SFMT, is provided under 3-clause BSD license.
@@ -9,8 +11,6 @@
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/
  * 
  */
-
-package com.github.okamumu.jmtrandom;
 
 public class SFMT64 extends MTRand64 {
 
@@ -33,12 +33,19 @@ public class SFMT64 extends MTRand64 {
 
 	private final long msk3;
 
+	/*
+	 * The utility method to convert two int values to a long.
+	 */
 	private static final long int2toLong(int u, int l) {
 //		return ((long) u << 32) | (0x00000000ffffffffL & l);
 		return Integer.toUnsignedLong(u) << 32 | Integer.toUnsignedLong(l);
 	}
 
-	public SFMT64(SFMTParams params) {
+	/*
+	 * A common constructor which is used for the other constructors
+	 * @param params An object of SFMTParams which is a set of parameters for SFMT
+	 */
+	private SFMT64(SFMTParams params) {
 		this.params = params;
 		fSR2 = 8 * params.SFMT_SR2;
 		fSL2 = 8 * params.SFMT_SL2;
@@ -59,30 +66,56 @@ public class SFMT64 extends MTRand64 {
 		x = new long [params.SFMT_N64];
 	}
 
+	/**
+	 * Constructor
+	 * @param seed An integer as a seed
+	 * @param params An object of SFMTParams which is a set of parameters for SFMT
+	 */
 	public SFMT64(int seed, SFMTParams params) {
 		this(params);
 		this.initGenRand(seed);
 	}
 	
+	/**
+	 * Constructor
+	 * @param initKey An array of integers
+	 * @param params An object of SFMTParams which is a set of parameters for SFMT
+	 */
 	public SFMT64(int[] initKey, SFMTParams params) {
 		this(params);
 		this.initByArray(initKey);
 	}
 
+	/**
+	 * Constructor with the default params of SFMT
+	 * @param seed An integer as a seed
+	 */
 	public SFMT64(int seed) {
 		this(defaultParams);
 		this.initGenRand(seed);
 	}
 	
+	/**
+	 * Constructor with the default params of SFMT
+	 * @param initKey An array of integers
+	 */
 	public SFMT64(int[] initKey) {
 		this(defaultParams);
 		this.initByArray(initKey);
 	}
 	
+	/**
+	 * The method to get a string to represent the generating polynomial.
+	 * @return A string
+	 */
 	public String getID() {
 		return params.SFMT_IDSTR;
 	}
 
+	/*
+	 * The method to set a seed which is called from the constructor.
+	 * @param seed An integer as a seed.
+	 */
 	private void initGenRand(int seed) {
 		int tmpu, tmpl;
 		tmpu = seed;
@@ -98,6 +131,12 @@ public class SFMT64 extends MTRand64 {
 		this.periodCertification();
 	}
 
+	/*
+	 * The method to check and modify the initial arrays to ensure that
+	 * the period of random sequence under a given seed becomes the required one.
+	 * 
+	 * This is called from the constructor.
+	 */
 	private void periodCertification() {
 		long[] parity = new long [] {int2toLong(params.SFMT_PARITY2, params.SFMT_PARITY1), int2toLong(params.SFMT_PARITY4, params.SFMT_PARITY3)};
 
@@ -127,14 +166,24 @@ public class SFMT64 extends MTRand64 {
 		}
 	}
 
+	/*
+	 * This is a private function is called in initByArray 
+	 */
 	private int func1(int x) {
 		return (x ^ (x >>> 27)) * 1664525;
 	}
 
+	/*
+	 * This is a private function is called in initByArray 
+	 */
 	private int func2(int x) {
 		return (x ^ (x >>> 27)) * 1566083941;
 	}
 
+	/*
+	 * The method to set a seed which is called from the constructor.
+	 * @param initKey An array of integers.
+	 */
 	private void initByArray(int[] initKey) {
 		int[] state = new int [x.length * 2];
 		int keyLength = initKey.length;
@@ -203,6 +252,11 @@ public class SFMT64 extends MTRand64 {
 		periodCertification();
 	}
 
+	/*
+	 * The method to generate a random sequence.
+	 * The several values of sequence is generated at once,
+	 * and they are stored in the array x[].
+	 */
 	private void genRandAll() {
 		int r1 = params.SFMT_N64 - 4;
 		int r2 = params.SFMT_N64 - 2;
@@ -229,6 +283,7 @@ public class SFMT64 extends MTRand64 {
 		}
 	}
 
+	@Override
 	public long genRand64() {
 		if (idx >= params.SFMT_N64) {
 			genRandAll();

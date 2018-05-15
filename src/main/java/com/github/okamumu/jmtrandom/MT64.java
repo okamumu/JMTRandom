@@ -1,4 +1,6 @@
-/*
+package com.github.okamumu.jmtrandom;
+
+/**
  * Mersenne Twister 64bit
  * 
  * The original program, mt19937-64, is provided under 3-clause BSD license.
@@ -9,8 +11,6 @@
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
  * 
  */
-
-package com.github.okamumu.jmtrandom;
 
 public final class MT64 extends MTRand64 {
 
@@ -26,28 +26,47 @@ public final class MT64 extends MTRand64 {
 	private final long mt[];
 	private int mti;
 	
+	/*
+	 * A common constructor which is used for the other constructors.
+	 */
 	private MT64() {
 		mt = new long [NN];
 		mti = NN + 1;
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param seed A long integer as a seed.
+	 */
 	public MT64(long seed) {
 		this();
 		this.initGenRand64(seed);
 	}
 
+	/**
+	 * Constructor
+	 * @param initKey A array of long integers used as a seed.
+	 */
 	public MT64(long[] initKey) {
 		this();
 		this.initByArray64(initKey);
 	}
 
+	/*
+	 * The method to set a seed which is called from the constructor.
+	 * @param seed A long integer
+	 */
 	private void initGenRand64(long seed) {
 		mt[0] = seed;
 		for (mti=1; mti<NN; mti++) {
 			mt[mti] = (6364136223846793005L * (mt[mti-1] ^ (mt[mti-1] >>> 62)) + mti);
 		}
 	}
-	
+
+	/*
+	 * The method to set an initial array which is called from the constructor.
+	 * @param initKey An array of long integers
+	 */
 	private void initByArray64(long[] initKey) {
 		int keyLength = initKey.length;
 		this.initGenRand64(19650218L);

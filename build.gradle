@@ -9,6 +9,7 @@
 plugins {
     id 'java-library'
     id 'jacoco'
+    id 'maven'
 }
 
 dependencies {
@@ -19,12 +20,38 @@ repositories {
     jcenter()
 }
 
+javadoc {
+    options.locale = 'en_US'
+}
+
 def defaultEncoding = 'UTF-8'
 
 compileJava {
   options.encoding = defaultEncoding
 }
-// sourceCompatibility = 1.7
-// targetCompatibility = 1.7
 
-version = "${currentVersion}"
+version = "0.1.0"
+
+// build docs director
+task copyDocs(type: Copy, dependsOn:[javadoc]) {
+    from 'build/docs/javadoc'
+    into 'docs'
+}
+
+// maven local
+
+def repo = new File(rootDir, "docs/repository")
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository url: "file://${repo.absolutePath}"
+      pom.version = "${version}"
+      pom.groupId = 'com.github.okamumu'
+      pom.artifactId = 'jmtrandom'
+    }
+  }
+}
+uploadArchives.dependsOn copyDocs
+
+task docs (dependsOn: uploadArchives)

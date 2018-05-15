@@ -1,5 +1,11 @@
 package com.github.okamumu.jmtrandom;
 
+/**
+ * An enumerate class to provide the set of parameters for SFMT.
+ * For example, Params19937 represents the parameter set for SFMT with
+ * the period 2^19937-1.
+ *
+ */
 public enum SFMTParams {
 
 	Params607(607,
