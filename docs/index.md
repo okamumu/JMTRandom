@@ -20,7 +20,7 @@ The following URL is used as the Maven repository for this library.
 
 https://okamumu.github.io/JMTRandom/repository/
 
-For example, in Gradle, we put the following codes in `gradle.build` to use this library.
+For example, in Gradle, we put the following codes in `build.gradle` to use this library.
 
 ```groovy
 // Set URL to two properties; url and artifactUrls
@@ -28,7 +28,8 @@ For example, in Gradle, we put the following codes in `gradle.build` to use this
 repositories {
   maven {
     url "https://okamumu.github.io/JMTRandom/repository/"
-  }.artifactUrls('https://okamumu.github.io/JMTRandom/repository/')
+    artifactUrls "https://okamumu.github.io/JMTRandom/repository/"
+  }
 }
 
 dependencies {
