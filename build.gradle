@@ -35,7 +35,7 @@ version = "0.1.0"
 // build docs director
 task copyDocs(type: Copy, dependsOn:[javadoc]) {
     from 'build/docs/javadoc'
-    into 'docs'
+    into 'docs/javadoc'
 }
 
 // maven local

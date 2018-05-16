@@ -1,6 +1,7 @@
 # Java
 *.class
 *.jar
+!docs/repository/**/*.jar # for maven
 *.war
 *.ear
 
